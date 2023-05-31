@@ -45,15 +45,18 @@ function findElement(arr, value) {
  *    2 => [ 1, 3 ]
  *    5 => [ 1, 3, 5, 7, 9 ]
  */
-function generateOdds(/* len */) {
-  // const arr = [];
-  // for (let index = 1; index < len * 2; index += 1) {
-  //   if (index % 2 === 1) {
-  //     arr.push(index);
-  //   }
-  // }
-  // return arr;
-  throw new Error('Not implemented');
+function generateOdds(len) {
+  if (!len) return false;
+  let arr = new Array(len).fill(1, 0, len);
+  let prevValue = 1;
+  arr = arr.map((elem, index) => {
+    if (index === 0) {
+      return 1;
+    }
+    prevValue += 2;
+    return prevValue;
+  });
+  return arr;
 }
 
 /**
@@ -476,8 +479,27 @@ function sortCitiesArray(arr) {
  *           [0,0,0,1,0],
  *           [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  let arr = new Array(n ** 2).fill(0);
+  arr = arr.map((elem, index) => {
+    if (index - (Math.floor(index / n) * n) === Math.floor(index / n)) {
+      return 1;
+    }
+    return 0;
+  });
+  const result = arr.reduce((resultArray, item, index) => {
+    const chunkIndex = Math.floor(index / n);
+
+    if (!resultArray[chunkIndex]) {
+      // eslint-disable-next-line no-param-reassign
+      resultArray[chunkIndex] = []; // start a new chunk
+    }
+
+    resultArray[chunkIndex].push(item);
+
+    return resultArray;
+  }, []);
+  return result;
 }
 
 /**
@@ -493,11 +515,22 @@ function getIdentityMatrix(/* n */) {
  *     0, 100 => [ 0, 1, 2, ..., 100 ]
  *     3, 3   => [ 3 ]
  */
-function getIntervalArray(/* start, end */) {
-  // const newArr = Array(end - start);
-  throw new Error('Not implemented');
+function getIntervalArray(start, end) {
+  const diff = end - start;
+  if (diff === 0) {
+    return [start];
+  }
+  let newArr = Array(diff + 1).fill(0);
+  let prevNumber = start;
+  newArr = newArr.map((elem, index) => {
+    if (index === 0) {
+      return start;
+    }
+    prevNumber += 1;
+    return prevNumber;
+  });
+  return newArr;
 }
-
 /**
  * Returns array containing only unique values from the specified array.
  *
@@ -543,8 +576,17 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+  array.map((item) => {
+    const key = (keySelector)(item);
+    let value = Array((valueSelector)(item));
+    if (map.has(key)) {
+      value = [...map.get(key), ...value];
+    }
+    return map.set(key, value);
+  });
+  return map;
 }
 
 /**
@@ -576,8 +618,13 @@ function selectMany(arr, childrenSelector) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  let current = [...arr];
+  indexes.map((element) => {
+    current = current[element];
+    return current;
+  });
+  return current;
 }
 
 /**
@@ -598,8 +645,19 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  const pivot = Math.ceil(arr.length / 2);
+  if (arr.length % 2 === 1) {
+    // has center element
+    const right = arr.splice(pivot);
+    const center = arr.splice(pivot - 1);
+    arr.unshift(...center);
+    arr.unshift(...right);
+  } else {
+    const right = arr.splice(pivot);
+    arr.unshift(...right);
+  }
+  return arr;
 }
 
 module.exports = {

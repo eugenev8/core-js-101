@@ -204,8 +204,34 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  const result = [];
+  for (let index = 1; index <= width * height; index += 1) {
+    if (index === 1) {
+      result.push('┌');
+    } else
+    if (index === width) {
+      result.push('┐', '\n');
+    } else
+    if (index === (width * height) - width + 1) {
+      result.push('└');
+    } else
+    if (index === (width * height)) {
+      result.push('┘', '\n');
+    } else
+    if (index % width === 0) {
+      result.push('│', '\n');
+    } else
+    if (index % width === 1) {
+      result.push('│');
+    } else
+    if (index < width || index > (width * height) - width) {
+      result.push('─');
+    } else {
+      result.push(' ');
+    }
+  }
+  return result.join('');
 }
 
 
@@ -243,8 +269,9 @@ function encodeToRot13(str) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  if (!value) return false;
+  return Object.getPrototypeOf(value) === String.prototype;
 }
 
 
@@ -272,8 +299,12 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const cards = ['A♣', '2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣',
+    'A♦', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦',
+    'A♥', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥',
+    'A♠', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠'];
+  return cards.findIndex((elem) => elem === value);
 }
 
 
