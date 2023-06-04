@@ -19,8 +19,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return new Date(value);
 }
 
 /**
@@ -34,8 +34,8 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return new Date(value);
 }
 
 
@@ -53,8 +53,12 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const year = date.getFullYear();
+  if ((year % 400 === 0 || year % 100 !== 0) && (year % 4 === 0)) {
+    return true;
+  }
+  return false;
 }
 
 
@@ -94,8 +98,16 @@ function timeSpanToString(/* startDate, endDate */) {
  *    Date.UTC(2016,3,5,18, 0) => Math.PI
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
-function angleBetweenClockHands(/* date */) {
-  throw new Error('Not implemented');
+function angleBetweenClockHands(date) {
+  const hours = date.getUTCHours() > 12 ? date.getUTCHours() - 12 : date.getUTCHours();
+  const minutes = date.getUTCMinutes();
+
+  const hoursAngle = 0.5 * (60 * hours + minutes);
+  const minutesAngle = 6 * minutes;
+  const angle = Math.abs(hoursAngle - minutesAngle) > 180
+    ? 360 - (hoursAngle - minutesAngle) : Math.abs(hoursAngle - minutesAngle);
+  const angleInRad = angle * (Math.PI / 180);
+  return angleInRad;
 }
 
 
